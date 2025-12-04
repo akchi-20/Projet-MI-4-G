@@ -5,6 +5,5 @@
 - des arbres pour les fuites
 - calcul des fuites suivant les données (20% des eaux traités)
 - histogramme en format PNG (a la fin)
-- colonnes :
-  
-- 
+- deroulement : 
+source -> usine -> stockage -> jonction -> raccordement -> usager

@@ -21,7 +21,7 @@ typedef struct{
     float PourcentageFuite;
 }Trancon;
 
-typedef struct{
+typedef struct _usine{
 	char ID[51];
 	int capacité_max;
 	int captage;

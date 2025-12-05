@@ -1,5 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <stdbool.h>
+
 typedef enum { 
     SOURCE, 
     USINE, 
@@ -18,6 +21,12 @@ typedef struct{
     float PourcentageFuite;
 }Trancon;
 
+typedef struct{
+	char ID[51];
+	int capacité_max;
+	int captage;
+}Usine;
+
 int main()
 {
     printf("Hello World");
@@ -29,8 +38,8 @@ int main()
 //Vérifier sur un noeud de l'arbre est une feuille
 bool estFeuille(pArbre a){
 	if( a == NULL ){
-		printf("Erreur !\n");
-		exit(1);
+		printf("Arbre vide !\n");
+		return 0;
 	}
 	if( a->Fgauche == NULL && a->Fdroit == NULL ){
 		return 1; // Vrai si l'arbre est une feuille
@@ -75,9 +84,7 @@ bool existeFilsGauche(pArbre a){
 
 // AVL <=> Arbre binaire de recherche automatiquement équilibré ("auto-équilibré"), il reste équilibré après opération
 
-#include<stdio.h>
-#include<stdlib.h>
-#include<stdbool.h>
+
 
 //-------------OPERATION SUR UN ARBRE BINAIRE-------------------------
 
@@ -95,7 +102,7 @@ bool existeFilsGauche(pArbre a);
 
 // Structure d'un noeud d'un AVL
 typedef struct _arbre{
-	int valeur; // elmt : Element ; contenu du noeud
+	Usine usine; // elmt : Element ; contenu du noeud
 	struct _arbre* Fgauche;
 	struct _arbre* Fdroit;
 	int equilibre; //
@@ -104,13 +111,13 @@ typedef struct _arbre{
 typedef Arbre* pArbre;
 
 // Déclaration et initialisation d'un noeud
-pArbre creerArbre(int v){
+pArbre creerArbre(Usine e){
 	pArbre p = malloc(sizeof(Arbre));
 	if(p == NULL){
 		printf("Erreur d'allocation de mémoire.\n");
 		exit(1);
 	}
-	p->valeur = v;
+	p->usine = e;
 	p->Fgauche = NULL;
 	p->Fdroit = NULL;
 	p->equilibre = 0; // Le noeud n'a pas de fils : son équilibre est à 0
@@ -121,50 +128,50 @@ pArbre creerArbre(int v){
 //------------------OPERATIONS--------------------------------------------
 
 // Opération de recherche
-pArbre recherche(pArbre a, int v){
+pArbre recherche(pArbre a, Usine e){
 	if(a == NULL){
 		return NULL;
 	}
-	else if(a->valeur == v){
+	else if(strcmp(a->usine.ID,e.ID) == 0){
 		return a;
 	}
-	else if(v < a->valeur){
-		return recherche(a->Fgauche, v);
+	else if(strcmp(a->usine.ID,e.ID)>0){
+		return recherche(a->Fgauche, e);
 	}
 	else{
-		return recherche(a->Fdroit, v);
+		return recherche(a->Fdroit, e);
 	}
 }
 
 //-----------------EQUILIBRAGE D'UN AVL------------------------------------
 
 // Insertion
-pArbre insertionABR(pArbre a, int v){
+pArbre insertionABR(pArbre a, Usine e){
 	if(a == NULL){
-		return creerArbre(v);
+		return creerArbre(e);
 	}
-	else if(v < a->valeur){
-		a->Fgauche = insertionABR(a->Fgauche, v);
+	else if(strcmp(a->usine.ID,e.ID) > 0){
+		a->Fgauche = insertionABR(a->Fgauche, e);
 	}
-	else if(v > a->valeur){
-		a->Fdroit = insertionABR(a->Fdroit, v);
+	else if(strcmp(a->usine.ID,e.ID) < 0){
+		a->Fdroit = insertionABR(a->Fdroit, e);
 	}
 	
 	return a;
 }
 
 // Rééquilibrage 
-pArbre insertionAVL(pArbre a, int v, int* h){
+pArbre insertionAVL(pArbre a, Usine e, int* h){
 	if(a == NULL){
 		*h = 1;
-		return creerArbre(v);
+		return creerArbre(e);
 	}
-	else if(v < a->valeur){
-		a->Fgauche = insertionAVL(a->Fgauche, v, h);
+	else if(strcmp(a->usine.ID,e.ID) > 0){
+		a->Fgauche = insertionAVL(a->Fgauche, e, h);
 		*h = -*h;
 	}
-	else if(v > a->valeur){
-		a->Fdroit = insertionAVL(a->Fdroit, v, h);
+	else if(strcmp(a->usine.ID,e.ID) < 0){
+		a->Fdroit = insertionAVL(a->Fdroit, e, h);
 	}
 	else{
 		*h = 0;
@@ -185,21 +192,21 @@ pArbre insertionAVL(pArbre a, int v, int* h){
 }
 
 // Suppression
-pArbre suppressionAVL(pArbre a, int v, int* h){
+pArbre suppressionAVL(pArbre a, Usine e, int* h){
 	pArbre p1;
 	if(a == NULL){
 		*h = 0;
 		return a;
 	}
-	else if(v > a->valeur){  // parcours pour trouver le noeud
-		a->Fdroit = suppressionAVL(a->Fdroit, v);
+	else if(strcmp(a->usine.ID,e.ID) < 0){  // parcours pour trouver le noeud
+		a->Fdroit = suppressionAVL(a->Fdroit, e);
 	}
-	else if(v < a->valeur){
-		a->Fgauche = suppressionAVL(a->Fgauche, v);
+	else if(strcmp(a->usine.ID,e.ID) > 0){
+		a->Fgauche = suppressionAVL(a->Fgauche, e);
 		*h = -*h;
 	}
 	else if(existeFilsDroit(a)){  // si il y a un fils droit...
-		a->Fdroit = suppMinAVL(a->Fdroit, h, &a->valeur); //... on cherche le minimum dedans
+		a->Fdroit = suppMinAVL(a->Fdroit, h, &a->usine); //... on cherche le minimum dedans
 	}
 	else{
 		p1 = a; // le noeud n'a qu'un fils gauche ou aucun fils
@@ -222,10 +229,10 @@ pArbre suppressionAVL(pArbre a, int v, int* h){
 	return a;
 }
 
-pArbre suppMinAVL(Arbre a, int* h, int* v){  // s'il n'y a plus de fils gauche...
+pArbre suppMinAVL(pArbre a, int* h, Usine* e){  // s'il n'y a plus de fils gauche...
 	pArbre p1;                               //... alors on a trouvé la plus petite valeur de l'arbre
 	if(a->Fgauche == NULL){
-		*v = a->valeur;
+		*e = a->usine;
 		*h = -1;
 		p1 = a;
 		a = a->Fdroit;                       // on remplace le noeud actuel par le fils droit...
@@ -233,11 +240,11 @@ pArbre suppMinAVL(Arbre a, int* h, int* v){  // s'il n'y a plus de fils gauche..
 		return a;
 	}
 	else{
-		a->Fgauche = suppMinAVL(a->Fgauche, h, v); // appel récursif sur le sous-arbre de gauche
+		a->Fgauche = suppMinAVL(a->Fgauche, h, e); // appel récursif sur le sous-arbre de gauche
 		*h = -*h;
 	}
 	if(*h != 0){
-		a->quilibre = a->equilibre + *h;     // mise à jour du facteur d'équilibrage 
+		a->equilibre = a->equilibre + *h;     // mise à jour du facteur d'équilibrage 
 		a = equilibrerAVL(a);
 		if(a->equilibre == 0){
 			*h = -1;

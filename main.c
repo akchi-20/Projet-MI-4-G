@@ -257,6 +257,74 @@ pArbre suppMinAVL(pArbre a, int* h, Usine* e){  // s'il n'y a plus de fils gauch
 	return a;
 }
 
+pArbre equilibrerAVL(pArbre a){
+	if(a->equilibre >= 2){
+		if(a->Fdroit>= 0){
+			return rotationGauche(a);
+		}
+		else {
+			return doubleRotationGauche(a);
+		}
+	}
+	else if(a->equilibre <= -2){
+		if(a->Fgauche <= 0){
+			return rotationDroite(a);
+		}
+		else{
+			return doubleRotationDroite(a);
+		}
+	}
+	return a;
+}
+
+
+pArbre doubleRotationGauche(pArbre a){
+	a->Fdroit = rotationDroite(a->Fdroit);
+	return rotationGauche(a);
+}
+
+
+pArbre doubleRotationDroite(pArbre a){
+	a->Fgauche = rotationGauche(a->Fgauche);
+	return rotationDroite(a);
+}
+
+
+pArbre rotationGauche(pArbre a){
+	pArbre pivot = malloc(sizeof(Arbre));
+	if(pivot == NULL){
+		printf("erreur allocation mémoire\n");
+		exit(1);
+	}
+	int eq_a = a->equilibre;
+    int eq_p = pivot->equilibre;*
+	a->equilibre = eq_a - max(eq_p,0)-1;
+	pivot->equilibre = min(eq_a-2,eq_a+eq_p-2,eq_p-1);
+	a =pivot;
+    return a;
+}
+
+pArbre rotationDroite(pArbre a){
+	pArbre pivot = malloc(sizeof(Arbre));
+	if(pivot == NULL){
+		printf("erreur allocation mémoire\n");
+		exit(1);
+	}
+	int eq_a = a->equilibre;
+    int eq_p = pivot->equilibre;*
+	a->equilibre = eq_a - min(eq_p,0)+1;
+	pivot->equilibre = max(eq_a+2,eq_a+eq_p+2,eq_p+1);
+	a =pivot;
+    return a;
+}
+
+
+
+
+
+
+
+
 
 
 

@@ -26,6 +26,51 @@ int main()
 }
 
 
+//Vérifier sur un noeud de l'arbre est une feuille
+bool estFeuille(pArbre a){
+	if( a == NULL ){
+		printf("Erreur !\n");
+		exit(1);
+	}
+	if( a->Fgauche == NULL && a->Fdroit == NULL ){
+		return 1; // Vrai si l'arbre est une feuille
+	}
+	else{
+		return 0; // Faux
+	}
+}
+
+// Vérifier si le fils droit d'un noeud existe
+bool existeFilsDroit(pArbre a){
+	if( a == NULL ){
+		printf("Erreur !\n");
+		exit(1);
+	}
+	else if( a->Fdroit == NULL ){
+		return 0; // Faux si l'arbre n'a pas de fils droit
+	}
+	else{
+		return 1; // Vrai
+	}
+}
+
+// Vérifier si le fils gauche d'un noeud existe
+bool existeFilsGauche(pArbre a){
+	if( a == NULL ){
+		printf("Erreur !\n");
+		exit(1);
+	}
+	else if( a->Fgauche == NULL ){
+		return 0; // Faux si l'arbre n'a pas de fils gauche
+	}
+	else{
+		return 1; // Vrai
+	}
+}
+
+
+
+
 //==================================== AVL =============================================
 
 // AVL <=> Arbre binaire de recherche automatiquement équilibré ("auto-équilibré"), il reste équilibré après opération

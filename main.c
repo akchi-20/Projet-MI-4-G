@@ -145,6 +145,7 @@ pArbre recherche(pArbre a, Usine e){
 
 //-----------------EQUILIBRAGE D'UN AVL------------------------------------
 
+/*
 // Insertion
 pArbre insertionABR(pArbre a, Usine e){
 	if(a == NULL){
@@ -159,6 +160,7 @@ pArbre insertionABR(pArbre a, Usine e){
 	
 	return a;
 }
+*/
 
 // Rééquilibrage 
 pArbre insertionAVL(pArbre a, Usine e, int* h){
